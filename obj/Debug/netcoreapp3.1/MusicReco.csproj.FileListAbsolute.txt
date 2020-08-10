@@ -1,0 +1,13 @@
+C:\Users\OLGA\Desktop\Course-.NET\MusicReco\MusicReco\bin\Debug\netcoreapp3.1\MusicReco.exe
+C:\Users\OLGA\Desktop\Course-.NET\MusicReco\MusicReco\bin\Debug\netcoreapp3.1\MusicReco.deps.json
+C:\Users\OLGA\Desktop\Course-.NET\MusicReco\MusicReco\bin\Debug\netcoreapp3.1\MusicReco.runtimeconfig.json
+C:\Users\OLGA\Desktop\Course-.NET\MusicReco\MusicReco\bin\Debug\netcoreapp3.1\MusicReco.runtimeconfig.dev.json
+C:\Users\OLGA\Desktop\Course-.NET\MusicReco\MusicReco\bin\Debug\netcoreapp3.1\MusicReco.dll
+C:\Users\OLGA\Desktop\Course-.NET\MusicReco\MusicReco\bin\Debug\netcoreapp3.1\MusicReco.pdb
+C:\Users\OLGA\Desktop\Course-.NET\MusicReco\MusicReco\obj\Debug\netcoreapp3.1\MusicReco.csprojAssemblyReference.cache
+C:\Users\OLGA\Desktop\Course-.NET\MusicReco\MusicReco\obj\Debug\netcoreapp3.1\MusicReco.AssemblyInfoInputs.cache
+C:\Users\OLGA\Desktop\Course-.NET\MusicReco\MusicReco\obj\Debug\netcoreapp3.1\MusicReco.AssemblyInfo.cs
+C:\Users\OLGA\Desktop\Course-.NET\MusicReco\MusicReco\obj\Debug\netcoreapp3.1\MusicReco.csproj.CoreCompileInputs.cache
+C:\Users\OLGA\Desktop\Course-.NET\MusicReco\MusicReco\obj\Debug\netcoreapp3.1\MusicReco.dll
+C:\Users\OLGA\Desktop\Course-.NET\MusicReco\MusicReco\obj\Debug\netcoreapp3.1\MusicReco.pdb
+C:\Users\OLGA\Desktop\Course-.NET\MusicReco\MusicReco\obj\Debug\netcoreapp3.1\MusicReco.genruntimeconfig.cache
