@@ -9,5 +9,12 @@ namespace MusicReco.Domain.Entity
     {
         public string ActionName { get; set; }
         public string MenuName { get; set; }
+
+        public MenuAction(int id, string actionName, string menuName)
+        {
+            Id = id;
+            ActionName = actionName;
+            MenuName = menuName;
+        }
     }
 }

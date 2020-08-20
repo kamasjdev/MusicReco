@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MusicReco.Helpers
+namespace MusicReco.Domain.Enum
 {
     public enum GenreName
     {

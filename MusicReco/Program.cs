@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MusicReco.App.Concrete;
+using MusicReco.App.Managers;
+using System;
+using System.Dynamic;
 using System.Globalization;
 using System.Net.WebSockets;
 
@@ -9,16 +12,24 @@ namespace MusicReco
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello! Welcome to MusicReco App!");
+
+            //5.Create your playlist or add songs to existing one
+            //    Dodatkowe menu:
+            //      -(podaj nazwę playlisty)create new playlist (wyświetlają się wszystkie piosenki w bazie i po Id piosenki dodaje je do playlisty.)
+            //      -(podaj id istniejącej playlisty)add songs to existing one (wyświetlają się wszystkie piosenki w bazie bez tych już dodanych i dodaje je po Id piosenki do playlisty)
+            //zacząć testy
+
             MenuActionService menuActionService = new MenuActionService();
-            menuActionService = Initialize(menuActionService);
             SongService songService = new SongService();
-            songService.CreateDatabase();
+            SongManager songManager = new SongManager(menuActionService, songService);
+            PlaylistManager playlistManager = new PlaylistManager(menuActionService, songService);
             bool running = true;
 
             while (running)
             {
-                Console.WriteLine("\r\nWhat do you want to do?");
+                Console.Clear();
+                Console.WriteLine("Hello! Welcome to MusicReco App!\r\n");
+                Console.WriteLine("What do you want to do?");
                 var mainMenu = menuActionService.GetMenuActionsByMenuName("Main");
                 foreach (var menuAction in mainMenu)
                 {
@@ -26,52 +37,44 @@ namespace MusicReco
                 }
                 Console.Write("Enter the number: ");
                 var operation = Console.ReadKey();
+                Console.WriteLine();
 
                 switch (operation.KeyChar)
                 {
                     case '1':
-                        char genreId = songService.AddNewSongView(menuActionService).KeyChar;
-                        var songId = songService.AddNewSong(genreId);
+                        Console.Clear();
+                        var newSongId = songManager.AddNewSong();
                         break;
                     case '2':
-                        char chosenReco = songService.RecommendView(menuActionService).KeyChar;
-                        ChooseOfRecommendation(chosenReco, songService);
+                        Console.Clear();
+                        songManager.Recommend();
                         break;
                     case '3':
-                        var likedSongId = songService.LikeChosenSong();
+                        Console.Clear();
+                        var likedSongId = songManager.LikeChosenSong();
                         break;
                     case '4':
-                        songService.ShowDetails();
+                        Console.Clear();
+                        songManager.ShowDetails();
                         break;
                     case '5':
+                        Console.Clear();
+                        int createdPlaylistId = playlistManager.CreateNewOrAdd();
+                        break;
+                    case '6':
+                        Console.Clear();
+                        playlistManager.ShowPlaylists();
+                        break;
+                    case '7':
                         running = false;
                         break;
                     default:
-                        Console.WriteLine("Such action doesn't exist.");
+                        Console.WriteLine("Such action doesn't exist. Press any key to try again...");
+                        Console.ReadKey();
                         break;
                 }
             }
         }
-        private static MenuActionService Initialize(MenuActionService menuActionService)
-        {
-            menuActionService.AddNewAction(1,"Add new song to the database.","Main");
-            menuActionService.AddNewAction(2,"Recommend me something.","Main");
-            menuActionService.AddNewAction(3,"Like a chosen song.","Main");
-            menuActionService.AddNewAction(4,"Show more information about a chosen song.","Main");
-            menuActionService.AddNewAction(5,"Exit.","Main");
-
-            menuActionService.AddNewAction(1, "Hip-Hop", "AddSongMenu");
-            menuActionService.AddNewAction(2, "Electronic", "AddSongMenu");
-            menuActionService.AddNewAction(3, "Jazz", "AddSongMenu");
-            menuActionService.AddNewAction(4, "Pop", "AddSongMenu");
-            menuActionService.AddNewAction(5, "Rock", "AddSongMenu");
-            menuActionService.AddNewAction(6, "Classical", "AddSongMenu");
-
-            menuActionService.AddNewAction(1, "Based on an artist", "RecommendMenu");
-            menuActionService.AddNewAction(2, "Based on a genre", "RecommendMenu");
-            menuActionService.AddNewAction(3, "Based on a year of release", "RecommendMenu");
-
-            return menuActionService;
-        }       
+               
     }
 }

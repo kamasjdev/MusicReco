@@ -14,7 +14,20 @@ namespace MusicReco.App.Common
         {
             Items = new List<T>();
         }
-
+        
+        public int GetLastId()
+        {
+            int lastId;
+            if(Items.Any())
+            {
+                lastId = Items.OrderBy(p => p.Id).LastOrDefault().Id;
+            }
+            else
+            {
+                lastId = 0;
+            }
+            return lastId;
+        }
         public int AddItem(T item)
         {
             Items.Add(item);
