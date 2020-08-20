@@ -13,7 +13,7 @@ namespace MusicReco.App.Common
         public BaseService()
         {
             Items = new List<T>();
-        }
+        } 
         
         public int GetLastId()
         {

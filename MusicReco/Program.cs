@@ -9,16 +9,8 @@ namespace MusicReco
 {
     class Program
     {
-
         static void Main(string[] args)
         {
-
-            //5.Create your playlist or add songs to existing one
-            //    Dodatkowe menu:
-            //      -(podaj nazwę playlisty)create new playlist (wyświetlają się wszystkie piosenki w bazie i po Id piosenki dodaje je do playlisty.)
-            //      -(podaj id istniejącej playlisty)add songs to existing one (wyświetlają się wszystkie piosenki w bazie bez tych już dodanych i dodaje je po Id piosenki do playlisty)
-            //zacząć testy
-
             MenuActionService menuActionService = new MenuActionService();
             SongService songService = new SongService();
             SongManager songManager = new SongManager(menuActionService, songService);
@@ -74,7 +66,6 @@ namespace MusicReco
                         break;
                 }
             }
-        }
-               
+        }              
     }
 }

@@ -51,5 +51,4 @@ namespace MusicReco.App.Concrete
             AddItem(new MenuAction(2, "Add songs to an existing playlist.", "PlaylistMenu"));    
         }
     }
-
 }

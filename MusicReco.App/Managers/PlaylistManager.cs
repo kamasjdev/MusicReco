@@ -227,7 +227,6 @@ namespace MusicReco.App.Managers
                 }
             }
         }
-
         public void ShowPlaylists()
         {
             var allPlaylists = _playlistService.GetAllItems();
