@@ -51,7 +51,7 @@ namespace MusicReco
                         break;
                     case '5':
                         Console.Clear();
-                        int createdPlaylistId = playlistManager.CreateNewOrAdd();
+                        playlistManager.CreateNewOrAdd();
                         break;
                     case '6':
                         Console.Clear();

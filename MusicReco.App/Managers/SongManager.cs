@@ -66,159 +66,169 @@ namespace MusicReco.App.Managers
             _songService.AddItem(song);
             Console.WriteLine("Successfully added! Press any key to continue...");
             Console.ReadKey();
-            Console.Clear();
             return song.Id;
         }
+        private void ShowRecoMenu(List<MenuAction> recommendMenu)
+        {
+            Console.WriteLine("What recommendation do you need?");
+            for (int i = 0; i < recommendMenu.Count; i++)
+            {
+                Console.WriteLine($"{recommendMenu[i].Id}. {recommendMenu[i].ActionName}");
+            }
+            Console.WriteLine("Press <ESC> to return to the Main menu...");
+            Console.Write("Enter chosen number: ");
+        }
 
+        private void NoRecommendedSongs()
+        {           
+            Console.WriteLine("There is no song fulfilling these criteria.");
+            Console.WriteLine("\r\nPress <ESC> to return to the Menu of recommendation... or different key to try again!");          
+        }
+        private void ShowRecommendedSongs(List<Song> recoSongs, string basedOn)
+        {
+            Console.WriteLine("\r\nSong id...  Arist... - Title...");
+            for (int i = 0; i < recoSongs.Count; i++)
+            {
+                Console.WriteLine($"{recoSongs[i].Id}.  {recoSongs[i].Artist} - {recoSongs[i].Title}");
+            }
+            recoSongs.Clear();
+            Console.WriteLine($"\r\nPress <ESC> to return to the Menu of recommendation... or different key to get RECO based on {basedOn} again!");
+        }
+        private bool Escape()
+        {
+            bool running = true;
+            var choice = Console.ReadKey(true);
+            if (choice.Key == ConsoleKey.Escape)
+                running = false;
+
+            return running;
+        }
+        private void RecoBasedOnArtist()
+        {
+            List<Song> recoSongs = new List<Song>();
+            bool running = true;
+            do
+            {
+                Console.Clear();
+                Console.Write("Please enter the name of artist: ");
+                string artistName = Console.ReadLine();
+
+                //Search songs created by chosen artist and add to recoSongs
+                foreach (var song in _songService.Items)
+                {
+                    if (song.Artist.Equals(artistName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        recoSongs.Add(song);
+                    }
+                }
+                if (recoSongs.Count == 0)
+                {
+                    NoRecommendedSongs();
+                    running = Escape();
+                }
+                else
+                {
+                    ShowRecommendedSongs(recoSongs, "artist");
+                    running = Escape();
+                }
+            } while (running);
+        }
+        private void RecoBasedOnGenre()
+        {
+            List<Song> recoSongs = new List<Song>();
+            bool running = true;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Please select a genre:");
+                for (int i = 1; i < 7; i++)
+                {
+                    Console.WriteLine($"{i}. {(GenreName)i}");
+                }
+                Console.Write("Enter the number: ");
+                Int32.TryParse(Console.ReadLine(), out int chosenGenre);
+
+                foreach (var song in _songService.Items)
+                {
+                    if ((int)song.Genre == chosenGenre)
+                    {
+                        recoSongs.Add(song);
+                    }
+                }
+                if (recoSongs.Count == 0)
+                {
+                    NoRecommendedSongs();
+                    running = Escape();
+                }
+                else
+                {
+                    ShowRecommendedSongs(recoSongs, "genre");
+                    running = Escape();
+                }
+            } while (running);
+        }
+        private void RecoBasedOnYear()
+        {
+            List<Song> recoSongs = new List<Song>();
+            bool running = true;
+            do
+            {
+                Console.Clear();
+                Console.Write("Please enter time interval, from: ");
+                int from;
+                Int32.TryParse(Console.ReadLine(), out from);
+                Console.Write("till: ");
+                int till;
+                Int32.TryParse(Console.ReadLine(), out till);
+
+                foreach (var song in _songService.Items)
+                {
+                    if (song.YearOfRelease >= from && song.YearOfRelease <= till)
+                    {
+                        recoSongs.Add(song);
+                    }
+                }
+                if (recoSongs.Count == 0)
+                {
+                    NoRecommendedSongs();
+                    running = Escape();
+                }
+                else
+                {
+                    ShowRecommendedSongs(recoSongs, "year of release");
+                    running = Escape();
+                }
+            } while (running);
+        }
         public void Recommend()
         {
             var recommendMenu = _menuActionService.GetMenuActionsByMenuName("RecommendMenu");
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("What recommendation do you need?");
-
-                for (int i = 0; i < recommendMenu.Count; i++)
-                {
-                    Console.WriteLine($"{recommendMenu[i].Id}. {recommendMenu[i].ActionName}");
-                }
-                Console.WriteLine("Press <ESC> to return to the Main menu...");
-                Console.Write("Enter chosen number: ");
+                ShowRecoMenu(recommendMenu);
+                //If ESC, return to Main menu.
                 var chosenReco = Console.ReadKey(true);
                 if (chosenReco.Key == ConsoleKey.Escape)
                     return;
 
                 char reco = chosenReco.KeyChar;
-                List<Song> recoSongs = new List<Song>();
-                if (reco == '1')
+                switch(reco)
                 {
-                    while (true)
-                    {
-                        Console.Clear();
-                        Console.Write("Please enter the name of artist: ");
-                        string artistName = Console.ReadLine();
-
-                        foreach (var song in _songService.Items)
-                        {
-                            if (song.Artist.Equals(artistName, StringComparison.OrdinalIgnoreCase))
-                            {
-                                recoSongs.Add(song);
-                            }
-                        }
-                        if (recoSongs.Count == 0)
-                        {
-                            Console.WriteLine("There is no song fulfilling these criteria.");
-                            Console.WriteLine("\r\nPress <ESC> to return to the Menu of recommendation... or different key to try again!");
-                            var choice = Console.ReadKey(true);
-                            if (choice.Key == ConsoleKey.Escape)
-                                break;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\r\nSong id...  Arist... - Title...");
-                            for (int i = 0; i < recoSongs.Count; i++)
-                            {
-                                Console.WriteLine($"{recoSongs[i].Id}.  {recoSongs[i].Artist} - {recoSongs[i].Title}");
-                            }
-                            recoSongs.Clear();
-                            Console.WriteLine("\r\nPress <ESC> to return to the Menu of recommendation... or different key to get RECO based on artist again!");
-                            var choice = Console.ReadKey(true);
-                            if (choice.Key == ConsoleKey.Escape)
-                                break;
-                        }
-                    }
+                    case '1':
+                        RecoBasedOnArtist();
+                        break;
+                    case '2':
+                        RecoBasedOnGenre();
+                        break;
+                    case '3':
+                        RecoBasedOnYear();
+                        break;
+                    default:
+                        Console.WriteLine("\r\nSuch option doesn't exist.");
+                        Continue();
+                        break;
                 }
-                else if (reco == '2')
-                {
-                    while (true)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("Please select a genre:");
-                        for (int i = 1; i < 7; i++)
-                        {
-                            Console.WriteLine($"{i}. {(GenreName)i}");
-                        }
-                        Console.Write("Enter the number: ");
-                        Int32.TryParse(Console.ReadLine(), out int chosenGenre);
-
-                        foreach (var song in _songService.Items)
-                        {
-                            if ((int)song.Genre == chosenGenre)
-                            {
-                                recoSongs.Add(song);
-                            }
-                        }
-                        if (recoSongs.Count == 0)
-                        {
-                            Console.WriteLine("There is no song fulfilling these criteria.");
-                            Console.WriteLine("\r\nPress <ESC> to return to the Menu of recommendation... or different key to try again!");
-                            var choice = Console.ReadKey(true);
-                            if (choice.Key == ConsoleKey.Escape)
-                                break;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\r\nSong id...  Arist... - Title...");
-                            for (int i = 0; i < recoSongs.Count; i++)
-                            {
-                                Console.WriteLine($"{recoSongs[i].Id}.  {recoSongs[i].Artist} - {recoSongs[i].Title}");
-                            }
-                            recoSongs.Clear();
-                            Console.WriteLine("\r\nPress <ESC> to return to the Menu of recommendation... or different key to get RECO based on genre again!");
-                            var choice = Console.ReadKey(true);
-                            if (choice.Key == ConsoleKey.Escape)
-                                break;
-                        }
-                    }
-                }
-                else if (reco == '3')
-                {
-                    while (true)
-                    {
-                        Console.Clear();
-                        Console.Write("Please enter time interval, from: ");
-                        int from;
-                        Int32.TryParse(Console.ReadLine(), out from);
-                        Console.Write("till: ");
-                        int till;
-                        Int32.TryParse(Console.ReadLine(), out till);
-
-                        foreach (var song in _songService.Items)
-                        {
-                            if (song.YearOfRelease >= from && song.YearOfRelease <= till)
-                            {
-                                recoSongs.Add(song);
-                            }
-                        }
-                        if (recoSongs.Count == 0)
-                        {
-                            Console.WriteLine("There is no song fulfilling these criteria.");
-                            Console.WriteLine("\r\nPress <ESC> to return to the Menu of recommendation... or different key to try again!");
-                            var choice = Console.ReadKey(true);
-                            if (choice.Key == ConsoleKey.Escape)
-                                break;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\r\nSong id...  Arist... - Title...");
-                            for (int i = 0; i < recoSongs.Count; i++)
-                            {
-                                Console.WriteLine($"{recoSongs[i].Id}.  {recoSongs[i].Artist} - {recoSongs[i].Title}");
-                            }
-                            recoSongs.Clear();
-                            Console.WriteLine("\r\nPress <ESC> to return to the Menu of recommendation... or different key to get RECO based on year of release again!");
-                            var choice = Console.ReadKey(true);
-                            if (choice.Key == ConsoleKey.Escape)
-                                break;
-                        }
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("\r\nSuch option doesn't exist.");
-                    Continue();
-                }
-        
             }
         }
         public int LikeChosenSong()
