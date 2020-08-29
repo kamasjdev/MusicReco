@@ -1,9 +1,13 @@
-﻿using MusicReco.App.Concrete;
+﻿using MusicReco.App.Abstract;
+using MusicReco.App.Concrete;
+using MusicReco.App.HelpersForManagers;
 using MusicReco.App.Managers;
+using MusicReco.Domain.Entity;
 using System;
 using System.Dynamic;
 using System.Globalization;
 using System.Net.WebSockets;
+using System.Xml.Serialization;
 
 namespace MusicReco
 {
@@ -11,43 +15,54 @@ namespace MusicReco
     {
         static void Main(string[] args)
         {
-            MenuActionService menuActionService = new MenuActionService();
-            SongService songService = new SongService();
-            SongManager songManager = new SongManager(menuActionService, songService);
-            PlaylistManager playlistManager = new PlaylistManager(menuActionService, songService);
+            MenuView menuView = new MenuView();
+            ISongService songService = new SongService();
+            SongManager songManager = new SongManager(menuView, songService);
+            PlaylistManager playlistManager = new PlaylistManager(menuView, songService);
             bool running = true;
 
             while (running)
             {
                 Console.Clear();
-                Console.WriteLine("Hello! Welcome to MusicReco App!\r\n");
-                Console.WriteLine("What do you want to do?");
-                var mainMenu = menuActionService.GetMenuActionsByMenuName("Main");
-                foreach (var menuAction in mainMenu)
-                {
-                    Console.WriteLine($"{menuAction.Id}. {menuAction.ActionName}");
-                }
-                Console.Write("Enter the number: ");
+                menuView.ShowMainMenu();
                 var operation = Console.ReadKey();
                 Console.WriteLine();
 
+                bool again = true;
                 switch (operation.KeyChar)
                 {
                     case '1':
                         Console.Clear();
-                        var newSongId = songManager.AddNewSong();
+                        var newSong = songManager.CreateNewSong();
+                        int newSongId = songManager.AddNewSong(newSong);
+                        if (newSongId != -1)
+                            Console.ReadKey();
                         break;
-                    case '2':
-                        Console.Clear();
-                        songManager.Recommend();
+                    case '2':                        
+                        do
+                        {
+                            Console.Clear();
+                            int choice = songManager.Recommend();
+                            again = songManager.RecommendationSwitcher(choice);
+                        } while (again);                       
                         break;
-                    case '3':
-                        Console.Clear();
-                        var likedSongId = songManager.LikeChosenSong();
+                    case '3':                        
+                        do
+                        {
+                            Console.Clear();
+                            string title = songManager.ChooseSongToBeLiked();
+                            int songId = songManager.LikeChosenSong(title);
+                            again = songManager.SuccessfulOrFailedLikeInfo(songId);
+                        }while(again);
                         break;
                     case '4':
-                        Console.Clear();
-                        songManager.ShowDetails();
+                        do
+                        {
+                            Console.Clear();
+                            string title = songManager.ChooseSongToShowDetails();
+                            var song = songManager.SearchSongToShowDetails(title);
+                            again = songManager.ShowDetails(song);
+                        } while (again);
                         break;
                     case '5':
                         Console.Clear();

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MusicReco.App.Concrete
 {
-    public class PlaylistService : BaseService<Playlist>
+    public class PlaylistService : BasePlaylistService
     {
 
     }

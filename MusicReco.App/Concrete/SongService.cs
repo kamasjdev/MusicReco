@@ -1,18 +1,20 @@
-﻿using MusicReco.App.Common;
+﻿using MusicReco.App.Abstract;
+using MusicReco.App.Common;
 using MusicReco.Domain.Entity;
 using MusicReco.Domain.Enum;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MusicReco.App.Concrete
 {
-    public class SongService : BaseService<Song>
-    {
+    public class SongService : BaseSongService
+    {       
         public SongService()
         {
             CreateDatabase();
-        }
+        }  
         private void CreateDatabase()
         {
             AddItem(new Song() { Id = 1, Artist = "Pezet", Title = "Magenta", Genre = GenreName.HipHop, YearOfRelease = 2020, Likes = 1, Description = "Utwór pochodzący z albumu Muzyka Współczesna" });

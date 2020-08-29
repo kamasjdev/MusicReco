@@ -1,5 +1,4 @@
-﻿using MusicReco.App.Abstract;
-using MusicReco.Domain.Common;
+﻿using MusicReco.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,18 +6,18 @@ using System.Text;
 
 namespace MusicReco.App.Common
 {
-    public class BaseService<T> : IService<T> where T : BaseEntity
+    public class BasePlaylistService
     {
-        public List<T> Items { get; set; }
-        public BaseService()
+        public List<Playlist> Items { get; set; }
+        public BasePlaylistService()
         {
-            Items = new List<T>();
-        } 
-        
+            Items = new List<Playlist>();
+        }
+
         public int GetLastId()
         {
             int lastId;
-            if(Items.Any())
+            if (Items.Any())
             {
                 lastId = Items.OrderBy(p => p.Id).LastOrDefault().Id;
             }
@@ -28,32 +27,31 @@ namespace MusicReco.App.Common
             }
             return lastId;
         }
-        public int AddItem(T item)
+        public int AddItem(Playlist item)
         {
             Items.Add(item);
             return item.Id;
         }
 
-        public List<T> GetAllItems()
+        public List<Playlist> GetAllItems()
         {
             return Items;
         }
 
-        public void RemoveItem(T item)
+        public void RemoveItem(Playlist item)
         {
             Items.Remove(item);
         }
 
-        public int UpdateItem(T item)
+        public int UpdateItem(Playlist item)
         {
             var entity = Items.FirstOrDefault(p => p.Id == item.Id);
 
-            if(entity != null)
+            if (entity != null)
             {
                 entity = item;
             }
             return entity.Id;
         }
-
     }
 }

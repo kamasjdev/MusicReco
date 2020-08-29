@@ -1,4 +1,5 @@
-﻿using MusicReco.App.Common;
+﻿using MusicReco.App.Abstract;
+using MusicReco.App.Common;
 using MusicReco.Domain.Entity;
 using System;
 using System.Collections.Generic;
@@ -6,12 +7,25 @@ using System.Text;
 
 namespace MusicReco.App.Concrete
 {
-    public class MenuActionService : BaseService<MenuAction>
+    public class MenuActionService : IMenuActionService
     {
+        public List<MenuAction> Items { get; set; }
         public MenuActionService()
         {
+            Items = new List<MenuAction>();
             Initialize();
         }
+
+        public void AddItem(MenuAction item)
+        {
+            Items.Add(item);
+        }
+
+        public void RemoveItem(MenuAction item)
+        {
+            Items.Remove(item);
+        }
+
         public List<MenuAction> GetMenuActionsByMenuName(string menuName)
         {
             List<MenuAction> result = new List<MenuAction>();
