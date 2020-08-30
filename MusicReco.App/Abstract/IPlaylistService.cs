@@ -13,5 +13,8 @@ namespace MusicReco.App.Abstract
         void RemoveItem(Playlist item);
         int UpdateItem(Playlist item);
         int GetLastId();
+        Playlist GetPlaylistById(int playlistId);
+        List<Song> ReturnSongsAsidePlaylist(List<Song> databaseSongs,Playlist playlistToUpdate);
+
     }
 }

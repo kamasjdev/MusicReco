@@ -82,8 +82,8 @@ namespace MusicReco.App.Common
         }
         public Song GetSongById(int songId)
         {
-            Song searched = Items.FirstOrDefault(p => p.Id == songId);
-            return searched;
+            return Items.FirstOrDefault(p => p.Id == songId);
+            
         }
     }
 }

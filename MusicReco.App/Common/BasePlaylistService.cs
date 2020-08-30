@@ -1,4 +1,5 @@
-﻿using MusicReco.Domain.Entity;
+﻿using MusicReco.App.Abstract;
+using MusicReco.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace MusicReco.App.Common
 {
-    public class BasePlaylistService
+    public class BasePlaylistService:IPlaylistService
     {
         public List<Playlist> Items { get; set; }
         public BasePlaylistService()
@@ -52,6 +53,25 @@ namespace MusicReco.App.Common
                 entity = item;
             }
             return entity.Id;
+        }
+
+        public List<Song> ReturnSongsAsidePlaylist(List<Song> databaseSongs, Playlist playlistToUpdate)
+        {
+            List<Song> availableSongs = new List<Song>();
+            availableSongs.AddRange(databaseSongs);
+            foreach (var song in playlistToUpdate.Content)
+            {
+                if (song.Id > 0 && song.Id <= databaseSongs.Count)
+                {
+                    availableSongs.Remove(song);
+                }
+            }
+            return availableSongs;
+        }
+
+        public Playlist GetPlaylistById(int playlistId)
+        {
+            return Items.FirstOrDefault(p => p.Id == playlistId);
         }
     }
 }

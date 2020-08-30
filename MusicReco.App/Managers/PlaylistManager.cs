@@ -10,58 +10,193 @@ using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
-
+//ShowPlaylist przepracować i zrobić do tego testy
+//zrobić testy do zaznaczonych tutaj dwóch metod
+//zrobić test do HelperMethods
+//zrobić testy do playlistService
 namespace MusicReco.App.Managers
 {
     public class PlaylistManager
     {
         private readonly MenuView _menuView;
         private PlaylistService _playlistService;
-        private ISongService _songService;       
+        private ISongService _songService;
+        private HelperMethods helper;
         public PlaylistManager(MenuView menuView, ISongService songService)
         {
             _menuView = menuView;
             _playlistService = new PlaylistService();
-            _songService = songService;                     
+            _songService = songService;
+            helper = new HelperMethods();
+        }
+        public int ChooseToCreateOrAddPlaylist()
+        {
+            Console.Clear();
+            _menuView.ShowPlaylistMenu();
+            var chosenOption = Console.ReadKey();
+            //If pressed ESC, return to the main menu.
+            if (chosenOption.Key == ConsoleKey.Escape)
+                return -1;
+            int chosenOptionId;
+            Int32.TryParse(chosenOption.KeyChar.ToString(), out chosenOptionId);
+            return chosenOptionId;
+
+        }
+        public bool CreateNewOrAddSwitcher(int choice)
+        {
+            switch (choice)
+            {
+                case -1: //return to Main Menu
+                    return false;
+                case 1:                   
+                    Playlist createdPlaylist = CreateNewPlaylist();
+                    int newPlaylistId = AddNewPlaylist(createdPlaylist);
+                    Continue();
+                    if (newPlaylistId != -1)
+                    {
+                        List<int> songsIds = ReturnSongsIdToBeAddedToPlaylist(newPlaylistId);
+                        int howManyAdded = UpdatePlaylist(newPlaylistId, songsIds);
+                        HowManySongsAddedToPlaylistInfo(howManyAdded);
+                    }                    
+                    break;
+                case 2:
+                    int playlistId;
+                    do
+                    {
+                        Console.Clear();
+                        playlistId = ChoosePlaylistToUpdate();
+                        if (playlistId != -1)
+                        {
+                            List<int> songsIds = ReturnSongsIdToBeAddedToPlaylist(playlistId);
+                            int howManyAdded = UpdatePlaylist(playlistId, songsIds);
+                            HowManySongsAddedToPlaylistInfo(howManyAdded);
+                        }
+                    } while (playlistId != -1);
+                    break;
+                default:
+                    Console.WriteLine("\r\nSuch operation doesn't exist.");
+                    Continue();
+                    break;
+            }
+            return true;
         }
 
-        public void CreateNewOrAdd()
-        {            
-            while (true)
+        public Playlist CreateNewPlaylist()
+        {
+            var allSongs = _songService.GetAllItems();
+            if (allSongs.Count == 0)
             {
-                Console.Clear();
-                _menuView.ShowPlaylistMenu();
+                Console.WriteLine("You can't create your playlist, because database of songs is empty.");
+                Console.WriteLine("Press any key to return to Main menu...");
+                Console.ReadKey();
+                return null;
+            }
 
-                //If pressed ESC, return to the main menu.
-                var chosenOption = Console.ReadKey(true);
-                if (chosenOption.Key == ConsoleKey.Escape)
-                    break;
+            //create new playlist with id, name and without songs
+            Console.Write("\r\nPlease name new playlist: ");
+            string playlistName = Console.ReadLine();
+            if(playlistName == "")
+                return null;
 
-                //When keys 1 or 2 are not pressed, return to the main menu or try again. 
-                char chosenOptionId = chosenOption.KeyChar;
-                if (chosenOptionId != '1' && chosenOptionId != '2')
-                {
-                    Console.Clear();
-                    Console.WriteLine("Such operation doesn't exist. Press <ESC> to return to Main menu...or different key to try again!");
-                    var choice = Console.ReadKey(true);
-                    if (choice.Key == ConsoleKey.Escape)
-                        break;
-                    else
-                        continue;
-                }
-                Console.Clear();
+            int lastId = _playlistService.GetLastId();
+            Playlist playlist = new Playlist(lastId + 1, playlistName);
 
-                switch(chosenOptionId)
-                {
-                    case '1':
-                        CreateNewPlaylist();
-                        break;
-                    case '2':
-                        AddSongsToPlaylist();
-                        break;
-                }
+            return playlist;
+        }
+
+        //przetestować
+        public int AddNewPlaylist(Playlist newPlaylist)
+        {
+            if (newPlaylist != null)
+            {
+                _playlistService.AddItem(newPlaylist);
+                Console.WriteLine("Successfully created!");
+                return newPlaylist.Id;
+            }
+            else
+            {
+                Console.WriteLine("\r\nSomething went wrong. Name your playlist!");
+                return -1;
             }
         }
+
+        public int ChoosePlaylistToUpdate()
+        {
+            var allPlaylists = _playlistService.GetAllItems();
+
+            //If there are no playlist, return to Playlist menu.
+            if (allPlaylists.Count == 0)
+            {
+                Console.WriteLine("\r\n\r\nThere is no playlist. You have to create playlist at first!");
+                Continue();
+                return -1;
+            }
+            _menuView.ShowUpdatingMenu(allPlaylists);
+            //If ESC is pressed, retrun to Playlist menu.
+            var chosenPlaylistKeyInfo = Console.ReadKey();
+            if (chosenPlaylistKeyInfo.Key == ConsoleKey.Escape)
+                return -1;
+            Int32.TryParse(chosenPlaylistKeyInfo.KeyChar.ToString(), out int playlistId);
+            //Chosen playlistId doesn't exist.
+            if (playlistId <= 0 || playlistId > allPlaylists.Count)
+            {
+                Console.WriteLine("\r\nSuch playlist doesn't exist.");
+                Continue();
+                return -1;
+            }
+            return playlistId;
+
+        }
+
+        public List<int> ReturnSongsIdToBeAddedToPlaylist(int playlistId)
+        {
+            Console.Clear();
+            Playlist playlistToUpdate = _playlistService.GetPlaylistById(playlistId);
+            Console.WriteLine($"Chosen playlist: {playlistToUpdate.Name}\r\n");
+
+            //Return songs which are not yet added to the playlist.
+            List<Song> availableSongs = _playlistService.ReturnSongsAsidePlaylist(_songService.Items,playlistToUpdate);
+            _menuView.ShowAvailableSongsToPlaylistAdd(availableSongs);
+
+            //Songs to add, chosen by user.
+            string chosenSongs = Console.ReadLine();
+            List<int> numbers = new List<int>();
+            numbers = helper.ChangeIdFromStrToList(chosenSongs);
+
+            return numbers;                          
+        }
+
+        //przetestować
+        public int UpdatePlaylist(int playlistId, List<int> songsIds)
+        {
+            int howManyAdded = 0;
+            if (songsIds.Count == 0)
+                return howManyAdded;
+
+            Playlist playlistToUpdate = _playlistService.GetPlaylistById(playlistId);
+            //Add new songs to the playlist.
+            List<Song> availableSongs = _playlistService.ReturnSongsAsidePlaylist(_songService.GetAllItems(), playlistToUpdate);
+
+            for (int i = 0; i < availableSongs.Count; i++)
+            {
+                if (songsIds.Exists(p => p == availableSongs[i].Id))
+                {
+                    playlistToUpdate.Content.Add(availableSongs[i]);
+                    howManyAdded++;
+                }
+            }
+            return howManyAdded;
+        }
+        public void HowManySongsAddedToPlaylistInfo(int howMany)
+        {
+            Console.WriteLine();
+            if(howMany==0)
+                Console.WriteLine("You don't add any song to your playlist!");
+            else
+                Console.WriteLine($"You added {howMany} songs to the playlist!");
+            Continue();
+        }
+
         public void ShowPlaylists()
         {
             var allPlaylists = _playlistService.GetAllItems();
@@ -113,171 +248,12 @@ namespace MusicReco.App.Managers
                 _menuView.ShowPlaylistSongs(songsAtPlaylist);
             }
         }
-        
-        private List<int> ChangeIdFromStrToList(string chosenSongs)
+        private static void Continue()
         {
-            List<int> numbers = new List<int>();
-            string idToNumbers = "";
-            for (int i = 0; i < chosenSongs.Length; i++)
-            {
-                if (i == chosenSongs.Length - 1 && Char.IsDigit(chosenSongs[i]))
-                {
-                    idToNumbers += chosenSongs[i];
-                    Int32.TryParse(idToNumbers, out int num);
-                    if (num != 0)
-                        numbers.Add(num);
-                    idToNumbers = "";
-                }
-
-                if (Char.IsDigit(chosenSongs[i]))
-                {
-                    idToNumbers += chosenSongs[i];
-                }
-                else
-                {
-                    Int32.TryParse(idToNumbers, out int num);
-                    if (num != 0)
-                        numbers.Add(num);
-                    idToNumbers = "";
-                }
-            }
-            return numbers;
-        }
-        
-
-        private List<Song> ReturnSongsAsidePlaylist(Playlist playlistToUpdate)
-        {
-            List<Song> availableSongs = new List<Song>();
-            availableSongs.AddRange(_songService.GetAllItems());
-            foreach (var song in playlistToUpdate.Content)
-            {
-                if (song.Id > 0 && song.Id <= _songService.GetAllItems().Count)
-                {
-                    availableSongs.Remove(song);
-                }
-            }
-            return availableSongs;
-        }
-        private int CreateNewPlaylist()
-        {
-            var allSongs = _songService.GetAllItems();
-
-            //If there are no songs in the database, return to the main menu
-            if (allSongs.Count == 0)
-            {
-                Console.WriteLine("You can't create your playlist, because database of songs is empty.");
-                Console.WriteLine("Press any key to return to Main menu...");
-                Console.ReadKey();
-                return -1;
-            }
-
-            //create new playlist with id, name and without songs
-            Console.Write("Please name new playlist: ");
-            string playlistName = Console.ReadLine();
-            int lastId = _playlistService.GetLastId();
-            Playlist playlist = new Playlist(lastId + 1, playlistName);
-            _playlistService.AddItem(playlist);
-
-            Console.Clear();
-            Console.WriteLine($"Created playlist: {playlistName}\r\n");
-            _menuView.ShowAvailableSongs(allSongs);
-            Console.WriteLine($"\r\nChoose songs to add, you can choose multiple songs at once. Enter Id of songs - must be separated by a comma!");
-            Console.Write("Your choice: ");
-
-            //songs to add, chosen by user
-            string chosenSongs = Console.ReadLine();
-            List<int> numbers = ChangeIdFromStrToList(chosenSongs);
-
-            //If songId (from numbers) is in the database, add it to the playlist.
-            int lastSongId = allSongs.Count;
-            for (int i = 0; i < numbers.Count; i++)
-            {
-                if (numbers[i] >= 1 && numbers[i] <= lastSongId)
-                    playlist.Content.Add(allSongs.First(p => p.Id == numbers[i]));
-            }
-
-            //Give info about created playlist, if nothing is added - write it's empty.
-            string success = "Playlist was successfully created!";
-            if (playlist.Content.Count == 0)
-                Console.WriteLine(success + " It's empty, so add favourite songs ASAP!");
-            else
-                Console.WriteLine(success);
-
+            Console.WriteLine("\r\nPress any key to continue...");
             Console.ReadKey();
-            return playlist.Id;
+            Console.Clear();
         }
 
-        private int AddSongsToPlaylist()
-        {
-            while (true)
-            {
-                Console.Clear();
-                var allPlaylists = _playlistService.GetAllItems();
-
-                //If there are no playlist, return to Playlist menu.
-                if (allPlaylists.Count == 0)
-                {
-                    Console.WriteLine("There is no playlist. You have to create playlist at first!");
-                    Console.ReadKey(true);
-                    break;
-                }
-
-                _menuView.ShowUpdatingMenu(allPlaylists);
-                //If ESC is pressed, retrun to Playlist menu.
-                var chosenPlaylistKeyInfo = Console.ReadKey();
-                if (chosenPlaylistKeyInfo.Key == ConsoleKey.Escape)
-                    break;
-
-                //If chosen playlistId doesn't exist, return to Playlist menu or try again.
-                Int32.TryParse(chosenPlaylistKeyInfo.KeyChar.ToString(), out int playlistId);
-                if (playlistId <= 0 || playlistId > allPlaylists.Count)
-                {
-                    Console.WriteLine("\r\nSuch playlist doesn't exist. Press <ESC> to return to Playlist menu...or different key to try again!");
-                    var choice = Console.ReadKey(true);
-                    if (choice.Key == ConsoleKey.Escape)
-                        break;
-                    else
-                        continue;
-                }
-
-                Console.Clear();
-                Playlist playlistToUpdate = allPlaylists.First(p => p.Id == playlistId);
-                Console.WriteLine($"Chosen playlist to update: {playlistToUpdate.Name}\r\n");
-
-                //Return songs which are not yet added to the playlist.
-                List<Song> availableSongs = ReturnSongsAsidePlaylist(playlistToUpdate);
-                _menuView.ShowAvailableSongs(availableSongs);
-                Console.WriteLine($"\r\nChoose songs to add, you can choose multiple songs at once. Enter Id of songs - must be separated by a comma!");
-                Console.Write("Your choice: ");
-
-                //songs to add, chosen by user
-                string chosenSongs = Console.ReadLine();
-                List<int> numbers = ChangeIdFromStrToList(chosenSongs);
-
-                //Add new songs to the playlist.
-                int howManyAdded = 0;
-                for (int i = 0; i < availableSongs.Count; i++)
-                {
-                    if (numbers.Exists(p => p == availableSongs[i].Id))
-                    {
-                        playlistToUpdate.Content.Add(availableSongs[i]);
-                        howManyAdded++;
-                    }
-                }
-                //If nothing was added, try again. Otherwise give info about success.
-                if (howManyAdded == 0)
-                {
-                    Console.WriteLine("You don't add any song to your playlist! Try again...");
-                    Console.ReadKey(true);
-                    continue;
-                }
-                Console.WriteLine("Songs were added successfully!");
-                Console.ReadKey(true);
-                return _playlistService.UpdateItem(playlistToUpdate);
-            }
-            return -1;
-        }
-
-       
     }
 }

@@ -65,8 +65,12 @@ namespace MusicReco
                         } while (again);
                         break;
                     case '5':
-                        Console.Clear();
-                        playlistManager.CreateNewOrAdd();
+                        do
+                        {
+                            Console.Clear();
+                            int choice = playlistManager.ChooseToCreateOrAddPlaylist();
+                            again = playlistManager.CreateNewOrAddSwitcher(choice);
+                        } while (again);
                         break;
                     case '6':
                         Console.Clear();

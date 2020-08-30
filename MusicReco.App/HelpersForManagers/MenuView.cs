@@ -104,6 +104,17 @@ namespace MusicReco.App.HelpersForManagers
             }
             Console.WriteLine();
         }
+        public void ShowAvailableSongsToPlaylistAdd(List<Song> allSongs)
+        {
+            Console.WriteLine("Available songs in database:");
+            Console.WriteLine("\r\nSong id...  Arist... - Title...");
+            foreach (var song in allSongs)
+            {
+                Console.WriteLine($"{song.Id}. {song.Artist} - {song.Title}");
+            }
+            Console.WriteLine($"\r\nChoose songs to add, you can choose multiple songs at once. Enter Id of songs - must be separated by a comma!");
+            Console.Write("Your choice: ");
+        }
 
         public void ShowPlaylistMenu()
         {
