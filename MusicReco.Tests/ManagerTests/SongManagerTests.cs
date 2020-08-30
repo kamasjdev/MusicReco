@@ -45,43 +45,60 @@ namespace MusicReco.Tests.ManagerTests
             result.Should().Be(-1);
         }
         [Fact]
-        public void Should_ReturnMinusOneOrSongId_When_Called_LikeChosenSong()
+        public void Should_ReturnSongId_When_Called_LikeChosenSong()
         {
             //Arrange
             Song song = new Song(3, "Alicja Majewska", "Żyć się chce",GenreName.Pop,2019, 1,"");
             var mock = new Mock<ISongService>();
             mock.Setup(m => m.CheckSongExistsInDatabase(song.Title)).Returns(song.Id);
+            var manager = new SongManager(new MenuView(), mock.Object);
+            //Act
+            var result = manager.LikeChosenSong(song.Title);
+            //Assert
+            result.Should().BeOfType(typeof(int));
+            result.Should().Be(song.Id);
+            result.Should().Be(3);
+        }
+        [Fact]
+        public void Should_ReturnMinusOne_When_Called_LikeChosenSong_WhichDoesntExists()
+        {
+            //Arrange
+            var mock = new Mock<ISongService>();
             mock.Setup(m => m.CheckSongExistsInDatabase("Unknown Title")).Returns(-1);
             var manager = new SongManager(new MenuView(), mock.Object);
             //Act
-            var result1 = manager.LikeChosenSong(song.Title);
-            var result2 = manager.LikeChosenSong("Unknown Title");
+            var result = manager.LikeChosenSong("Unknown Title");
             //Assert
-            result1.Should().BeOfType(typeof(int));
-            result1.Should().Be(song.Id);
-            result1.Should().Be(3);
-
-            result2.Should().BeOfType(typeof(int));
-            result2.Should().Be(-1);
+            result.Should().BeOfType(typeof(int));
+            result.Should().Be(-1);
         }
         [Fact]
-        public void Should_ReturnSongOrNull_When_CalledSearchSongToShowDetails()
+        public void Should_ReturnSong_When_CalledSearchSongToShowDetails()
         {
             //Arrange
             Song song = new Song(3, "Alicja Majewska", "Żyć się chce", GenreName.Pop, 2019, 1, "");
             var mock = new Mock<ISongService>();
             mock.Setup(m => m.CheckSongExistsInDatabase(song.Title)).Returns(song.Id);
-            mock.Setup(m => m.CheckSongExistsInDatabase("Unknown Title")).Returns(-1);
             mock.Setup(m => m.GetSongById(song.Id)).Returns(song);
             var manager = new SongManager(new MenuView(), mock.Object);
             //Act
             var result1 = manager.SearchSongToShowDetails(song.Title);
-            var result2 = manager.SearchSongToShowDetails("Unknown Title");
             //Assert
             result1.Should().NotBeNull();
             result1.Should().BeOfType(typeof(Song));
             result1.Should().Be(song);
 
+        }
+        [Fact]
+        public void Should_ReturnNull_When_CalledSearchSongToShowDetails_WhichDoesntExist()
+        {
+            //Arrange
+            var mock = new Mock<ISongService>();
+            mock.Setup(m => m.CheckSongExistsInDatabase("Unknown Title")).Returns(-1);
+            var manager = new SongManager(new MenuView(), mock.Object);
+            //Act
+            var result2 = manager.SearchSongToShowDetails("Unknown Title");
+            //Assert
             result2.Should().Be(null);
         }
     }

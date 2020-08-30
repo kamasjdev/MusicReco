@@ -13,6 +13,7 @@ namespace MusicReco.App.HelpersForManagers
         {
             _recoSongs = new List<Song>();
         }
+
         public List<Song> RecoBasedOnArtist(List<Song> songs, string artistName)
         {          
             _recoSongs.Clear();
@@ -26,6 +27,7 @@ namespace MusicReco.App.HelpersForManagers
             }
             return _recoSongs;    
         }
+
         public List<Song> RecoBasedOnGenre(List<Song> songs, int chosenGenre)
         {
             _recoSongs.Clear();
@@ -38,6 +40,7 @@ namespace MusicReco.App.HelpersForManagers
             }
             return _recoSongs;
         }
+
         public List<Song> RecoBasedOnYear(List<Song> songs, int[] fromTill)
         {
             _recoSongs.Clear();

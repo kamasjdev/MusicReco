@@ -12,7 +12,24 @@ namespace MusicReco.Tests.ServiceTests
     public class SongServiceTests
     {
         [Fact]
-        public void Should_ReturnMinusOneOrSongId_When_CheckSongExistsInDatabase()
+        public void Should_SongId_When_CheckSongExistsInDatabase()
+        {
+            //Arrange
+            SongService songService = new SongService();
+            int lastId = songService.GetLastId();
+            Song song = new Song(lastId + 1, "The Weeknd", "The Hills", GenreName.Pop, 2015, 1, "");
+            songService.AddItem(song);
+            //Act
+            var result2 = songService.CheckSongExistsInDatabase(song.Title);
+            //Assert
+            result2.Should().NotBe(null);
+            result2.Should().BeOfType(typeof(int));
+            result2.Should().Be(song.Id);
+            //Clear
+            songService.RemoveItem(song);
+        }
+        [Fact]
+        public void Should_ReturnMinusOne_When_CalledCheckSongExistsInDatabase_SongDoesntExistInDatabase()
         {
             //Arrange
             SongService songService = new SongService();
@@ -22,18 +39,11 @@ namespace MusicReco.Tests.ServiceTests
             songService.AddItem(song2);
 
             //Act
-            var result1 = songService.CheckSongExistsInDatabase(song1.Title);
-            var result2 = songService.CheckSongExistsInDatabase(song2.Title);
+            var result = songService.CheckSongExistsInDatabase(song1.Title);
             //Assert
-            result1.Should().NotBe(null);
-            result1.Should().BeOfType(typeof(int));
-            result1.Should().Be(-1);
-
-            result2.Should().NotBe(null);
-            result2.Should().BeOfType(typeof(int));
-            result2.Should().Be(song2.Id);
-            //Clear
-            songService.RemoveItem(song2);
+            result.Should().NotBe(null);
+            result.Should().BeOfType(typeof(int));
+            result.Should().Be(-1);
         }
         [Fact]
         public void Should_GetLastIdOfAllSongs_When_CalledGetLastId()
@@ -68,24 +78,32 @@ namespace MusicReco.Tests.ServiceTests
 
         }
         [Fact]
-        public void Should_GetSongOrNull_When_CalledGetSongById()
+        public void Should_GetSong_When_CalledGetSongById()
         {
             //Arrange
             var songService = new SongService();
             int lastId = songService.GetLastId();
-            Song song1 = new Song(lastId + 1, "The Weeknd", "The Hills", GenreName.Pop, 2015, 1, "");
-            Song song2 = new Song(lastId + 2, "Selah Sue", "Crazy Vibes", GenreName.Jazz, 2011, 1, "");
-            songService.AddItem(song1);
+            Song song = new Song(lastId + 1, "The Weeknd", "The Hills", GenreName.Pop, 2015, 1, "");
+            songService.AddItem(song);
             //Act
-            var result1 = songService.GetSongById(song1.Id);
-            var result2 = songService.GetSongById(song2.Id);
+            var result = songService.GetSongById(song.Id);
             //Assert
-            result1.Should().BeOfType(typeof(Song));
-            result1.Should().Be(song1);
-
-            result2.Should().BeNull();
+            result.Should().BeOfType(typeof(Song));
+            result.Should().Be(song);
             //Clear
-            songService.RemoveItem(song1);
+            songService.RemoveItem(song);
+        }
+        [Fact]
+        public void Should_ReturnNull_When_CalledGetSongById_SongDoesntExistInDatabase()
+        {
+            //Arrange
+            var songService = new SongService();
+            int lastId = songService.GetLastId();
+            Song song = new Song(lastId + 1, "The Weeknd", "The Hills", GenreName.Pop, 2015, 1, "");
+            //Act
+            var result = songService.GetSongById(song.Id);
+            //Assert
+            result.Should().BeNull();
         }
     }
 }

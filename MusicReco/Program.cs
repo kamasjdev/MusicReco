@@ -17,8 +17,9 @@ namespace MusicReco
         {
             MenuView menuView = new MenuView();
             ISongService songService = new SongService();
+            IPlaylistService playlistService = new PlaylistService();
             SongManager songManager = new SongManager(menuView, songService);
-            PlaylistManager playlistManager = new PlaylistManager(menuView, songService);
+            PlaylistManager playlistManager = new PlaylistManager(menuView, songService, playlistService);
             bool running = true;
 
             while (running)
@@ -73,8 +74,14 @@ namespace MusicReco
                         } while (again);
                         break;
                     case '6':
-                        Console.Clear();
-                        playlistManager.ShowPlaylists();
+                        int playlistId;
+                        do
+                        {
+                            Console.Clear();
+                            playlistId = playlistManager.ChoosePlaylistToShow();
+                            playlistManager.ShowPlaylist(playlistId);
+
+                        } while (playlistId != -1);
                         break;
                     case '7':
                         running = false;

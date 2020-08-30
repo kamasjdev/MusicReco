@@ -28,6 +28,7 @@ namespace MusicReco.App.Common
             }
             return lastId;
         }
+
         public int AddItem(Playlist item)
         {
             Items.Add(item);
@@ -72,6 +73,11 @@ namespace MusicReco.App.Common
         public Playlist GetPlaylistById(int playlistId)
         {
             return Items.FirstOrDefault(p => p.Id == playlistId);
+        }
+
+        public void AddSongToPlaylist(Playlist playlist, Song song)
+        {
+            playlist.Content.Add(song);
         }
     }
 }

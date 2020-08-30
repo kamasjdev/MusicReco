@@ -15,6 +15,7 @@ namespace MusicReco.App.HelpersForManagers
         {
             _menuActionService = new MenuActionService();
         }
+
         public void ShowMainMenu()
         {
             Console.WriteLine("Hello! Welcome to MusicReco App!\r\n");
@@ -26,6 +27,7 @@ namespace MusicReco.App.HelpersForManagers
             }
             Console.Write("Enter the number: ");
         }
+
         public void ShowAddSongMenu()
         {
             var addSongMenu = _menuActionService.GetMenuActionsByMenuName("AddSongMenu");
@@ -36,6 +38,7 @@ namespace MusicReco.App.HelpersForManagers
             }
             Console.WriteLine("Press <ESC> to return to the Main menu...");
         }
+
         public void ShowRecoMenu()
         {
             var recommendMenu = _menuActionService.GetMenuActionsByMenuName("RecommendMenu");
@@ -47,6 +50,7 @@ namespace MusicReco.App.HelpersForManagers
             Console.WriteLine("Press <ESC> to return to the Main menu...");
             Console.Write("Enter chosen number: ");
         }
+
         public string ShowRecoBasedOnArtistMenu()
         {
             Console.Clear();
@@ -54,6 +58,7 @@ namespace MusicReco.App.HelpersForManagers
             string artistName = Console.ReadLine();
             return artistName;
         }
+
         public int ShowRecoBasedOnGenreMenu()
         {
             Console.Clear();
@@ -66,6 +71,7 @@ namespace MusicReco.App.HelpersForManagers
             Int32.TryParse(Console.ReadLine(), out int chosenGenre);
             return chosenGenre;
         }
+
         public int[] ShowRecoBasedOnYearMenu()
         {
             Console.Clear();
@@ -78,6 +84,7 @@ namespace MusicReco.App.HelpersForManagers
             int[] fromTill = { from,till };
             return fromTill;
         }
+
         public bool ShowResultOfReco(List<Song> recoSongs, string basedOn)
         {
             bool running = true;
@@ -104,6 +111,7 @@ namespace MusicReco.App.HelpersForManagers
             }
             Console.WriteLine();
         }
+
         public void ShowAvailableSongsToPlaylistAdd(List<Song> allSongs)
         {
             Console.WriteLine("Available songs in database:");
@@ -139,9 +147,17 @@ namespace MusicReco.App.HelpersForManagers
             Console.Write("Enter playlist Id: ");
         }
 
-        public void ShowPlaylistSongs(IEnumerable<Song> songsAtPlaylist)
+        public void ShowPlaylistSongs(Playlist playlist)
         {
-
+            Console.WriteLine($"Playlist: {playlist.Name}\r\n");
+            if (playlist.Content.Count == 0)
+            {
+                Console.WriteLine("There is no song here!");
+                Console.WriteLine("\r\nPress any key to return to the list of your playlists...");
+                Console.ReadKey(true);
+                return;
+            }
+            IEnumerable<Song> songsAtPlaylist = playlist.Content.OrderBy(song => song.Id);
             Console.WriteLine("Song id...  Arist... - Title...");
             foreach (var song in songsAtPlaylist)
             {
@@ -150,11 +166,23 @@ namespace MusicReco.App.HelpersForManagers
             Console.WriteLine("\r\nPress any key to return to the list of your playlists...");
             Console.ReadKey(true);
         }
+
+        public void ShowAllPlaylists(List<Playlist> allPlaylists)
+        {
+            Console.WriteLine("Press <ESC> to return to the Main menu...\r\n");
+            foreach (var playlist in allPlaylists)
+            {
+                Console.WriteLine($"{playlist.Id}. {playlist.Name}");
+            }
+            Console.Write("Please type playlist Id to show songs: ");
+        }
+
         private void ShowNoRecommendedSongs()
         {
             Console.WriteLine("There is no song fulfilling these criteria.");
             Console.WriteLine("\r\nPress <ESC> to return to the Menu of recommendation... or different key to try again!");
         }
+
         private void ShowRecommendedSongs(List<Song> recoSongs, string basedOn)
         {
             Console.WriteLine("\r\nSong id...  Arist... - Title...");
@@ -164,6 +192,7 @@ namespace MusicReco.App.HelpersForManagers
             }
             Console.WriteLine($"\r\nPress <ESC> to return to the Menu of recommendation... or different key to get RECO based on {basedOn} again!");
         }
+
         private bool Escape()
         {
             bool running = true;
@@ -173,7 +202,5 @@ namespace MusicReco.App.HelpersForManagers
 
             return running;
         }
-
-
     }
 }

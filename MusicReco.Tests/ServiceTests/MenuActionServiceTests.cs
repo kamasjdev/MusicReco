@@ -45,6 +45,5 @@ namespace MusicReco.Tests.ServiceTests
             menuActionService.RemoveItem(menuAction1);
             menuActionService.RemoveItem(menuAction2);
         }
-
     }
 }

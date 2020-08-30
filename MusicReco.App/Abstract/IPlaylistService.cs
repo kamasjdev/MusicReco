@@ -15,6 +15,6 @@ namespace MusicReco.App.Abstract
         int GetLastId();
         Playlist GetPlaylistById(int playlistId);
         List<Song> ReturnSongsAsidePlaylist(List<Song> databaseSongs,Playlist playlistToUpdate);
-
+        void AddSongToPlaylist(Playlist playlist, Song song);
     }
 }
