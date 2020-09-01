@@ -50,7 +50,7 @@ namespace MusicReco.Tests.ManagerTests
         public void Should_AddSongsToPlaylistAndReturnHowAdded_When_CalledUpdatePlaylist()
         {
             //Arrange
-            Playlist playlistToUpdate = new Playlist(1, "Testing"); // its empty at the beggining.
+            Playlist playlistToUpdate = new Playlist(1, "Testing"); // its empty at the beginning.
             Song song1 = new Song(1, "The Weeknd", "The Hills", GenreName.Pop, 2015, 1, ""); 
             Song song2 = new Song(2, "Alicja Majewska", "Żyć się chce", GenreName.Pop, 2019, 1, ""); 
             Song song3 = new Song(3, "Selah Sue", "Crazy Vibes", GenreName.Jazz, 2011, 1, ""); 
@@ -82,7 +82,7 @@ namespace MusicReco.Tests.ManagerTests
         public void Should_ReturnZero_When_CalledUpdatePlaylistWithEmptySongIds()
         {
             //Arrange
-            Playlist playlistToUpdate = new Playlist(1, "Testing"); // its empty at the beggining.
+            Playlist playlistToUpdate = new Playlist(1, "Testing"); // its empty at the beginning.
             Song song1 = new Song(1, "The Weeknd", "The Hills", GenreName.Pop, 2015, 1, "");
             Song song2 = new Song(2, "Alicja Majewska", "Żyć się chce", GenreName.Pop, 2019, 1, "");
             Song song3 = new Song(3, "Selah Sue", "Crazy Vibes", GenreName.Jazz, 2011, 1, "");
