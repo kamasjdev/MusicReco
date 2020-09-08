@@ -22,6 +22,7 @@ namespace MusicReco.Tests.ManagerTests
             Song song = new Song(1,"The Weeknd","The Hills",GenreName.Pop,2015,1,"");
             var mock = new Mock<ISongService>();
             mock.Setup(m => m.AddItem(song));
+            mock.Setup(m => m.UpdateFileWithSongs(song));
             var manager = new SongManager(new MenuView(), mock.Object);
             //Act
             var result = manager.AddNewSong(song);
@@ -37,6 +38,7 @@ namespace MusicReco.Tests.ManagerTests
             Song song = null;
             var mock = new Mock<ISongService>();
             mock.Setup(m => m.AddItem(song));
+            mock.Setup(m => m.UpdateFileWithSongs(song));
             var manager = new SongManager(new MenuView(), mock.Object);
             //Act
             var result = manager.AddNewSong(song);
@@ -51,6 +53,7 @@ namespace MusicReco.Tests.ManagerTests
             Song song = new Song(3, "Alicja Majewska", "Żyć się chce",GenreName.Pop,2019, 1,"");
             var mock = new Mock<ISongService>();
             mock.Setup(m => m.CheckSongExistsInDatabase(song.Title)).Returns(song.Id);
+            mock.Setup(m => m.SaveLikeToFile(song.Id));
             var manager = new SongManager(new MenuView(), mock.Object);
             //Act
             var result = manager.LikeChosenSong(song.Title);

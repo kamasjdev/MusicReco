@@ -20,10 +20,10 @@ namespace MusicReco.Tests.ManagerTests
         {
             //Arrange
             Playlist p = new Playlist(1, "Testing vol 1");
-
+            var songServiceMock = new Mock<ISongService>();
             var mock = new Mock<IPlaylistService>();
             mock.Setup(m => m.AddItem(p));
-            var playlistManager = new PlaylistManager(new MenuView(), new SongService(), mock.Object);
+            var playlistManager = new PlaylistManager(new MenuView(), songServiceMock.Object, mock.Object);
             //Act
             var result1 = playlistManager.AddNewPlaylist(p);
             //Assert

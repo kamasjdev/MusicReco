@@ -5,8 +5,12 @@ using MusicReco.Domain.Entity;
 using MusicReco.Domain.Enum;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace MusicReco.App.Managers
 {
@@ -65,8 +69,9 @@ namespace MusicReco.App.Managers
             if (newSong != null)
             {
                 _songService.AddItem(newSong);
+                _songService.UpdateFileWithSongs(newSong);
                 Console.WriteLine("Successfully added! Press any key to continue...");
-                return newSong.Id;
+                return newSong.Id;               
             }
             else
                 return -1;            
@@ -137,8 +142,11 @@ namespace MusicReco.App.Managers
         public int LikeChosenSong(string songTitle)
         {
             int songId = _songService.CheckSongExistsInDatabase(songTitle);
-            if(songId != -1)
+            if (songId != -1)
+            {
                 _songService.LikeSong(songId);
+                _songService.SaveLikeToFile(songId);
+            }
             return songId;
         }
 

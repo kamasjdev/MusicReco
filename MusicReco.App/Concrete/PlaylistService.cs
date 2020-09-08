@@ -1,7 +1,10 @@
 ﻿using MusicReco.App.Abstract;
 using MusicReco.Domain.Entity;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -12,7 +15,11 @@ namespace MusicReco.App.Concrete
         public List<Playlist> Items { get; set; }
         public PlaylistService()
         {
-            Items = new List<Playlist>();
+            if (File.Exists(@"Playlists.json"))
+                Items = LoadPlaylistsFromFile();
+            else
+                Items = new List<Playlist>();
+            
         }
 
         public int GetLastId()
@@ -78,6 +85,23 @@ namespace MusicReco.App.Concrete
         public void AddSongToPlaylist(Playlist playlist, Song song)
         {
             playlist.Content.Add(song);
+        }
+
+        public void UpdateFileWithPlaylists()
+        {
+            using FileStream fs = File.Open(@"Playlists.json",FileMode.OpenOrCreate);
+            using StreamWriter sw = new StreamWriter(fs);
+            using JsonWriter writer = new JsonTextWriter(sw);
+            JsonSerializer serializer = new JsonSerializer();
+
+            serializer.Serialize(writer, Items);            
+        }
+
+        private List<Playlist> LoadPlaylistsFromFile()
+        {
+            string output = File.ReadAllText(@"Playlists.json");
+            var playlists = JsonConvert.DeserializeObject<List<Playlist>>(output);
+            return playlists;
         }
     }
 }

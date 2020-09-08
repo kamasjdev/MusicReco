@@ -55,6 +55,7 @@ namespace MusicReco.App.Managers
                         List<int> songsIds = ReturnSongsIdToBeAddedToPlaylist(newPlaylistId);
                         int howManyAdded = UpdatePlaylist(newPlaylistId, songsIds);
                         HowManySongsAddedToPlaylistInfo(howManyAdded);
+                        _playlistService.UpdateFileWithPlaylists();
                     }                    
                     break;
                 case 2:
@@ -68,6 +69,7 @@ namespace MusicReco.App.Managers
                             List<int> songsIds = ReturnSongsIdToBeAddedToPlaylist(playlistId);
                             int howManyAdded = UpdatePlaylist(playlistId, songsIds);
                             HowManySongsAddedToPlaylistInfo(howManyAdded);
+                            _playlistService.UpdateFileWithPlaylists();
                         }
                     } while (playlistId != -1);
                     break;

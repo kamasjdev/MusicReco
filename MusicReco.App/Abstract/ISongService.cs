@@ -16,5 +16,7 @@ namespace MusicReco.App.Abstract
         int CheckSongExistsInDatabase(string songTitle);
         void LikeSong(int songId);
         Song GetSongById(int songId);
+        void UpdateFileWithSongs(Song newSong);
+        void SaveLikeToFile(int songId);
     }
 }
