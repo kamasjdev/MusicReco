@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Songs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Song Id="1">
+    <Artist>Pezet</Artist>
+    <Title>Magenta</Title>
+    <YearOfRelease>2020</YearOfRelease>
+    <Genre>HipHop</Genre>
+    <Likes>1</Likes>
+    <Description>Utwór pochodzący z albumu Muzyka Współczesna</Description>
+  </Song>
+  <Song Id="2">
+    <Artist>Pezet</Artist>
+    <Title>Zaalarmuj</Title>
+    <YearOfRelease>2010</YearOfRelease>
+    <Genre>HipHop</Genre>
+    <Likes>1</Likes>
+    <Description>Utwór pochodzący z albumu Dziś w moim mieście</Description>
+  </Song>
+  <Song Id="3">
+    <Artist>Amy Winehouse</Artist>
+    <Title>Back to black</Title>
+    <YearOfRelease>2006</YearOfRelease>
+    <Genre>Jazz</Genre>
+    <Likes>1</Likes>
+    <Description>Pod tym samym tytułem został wydany drugi i ostatni studyjny album piosenkarki.</Description>
+  </Song>
+  <Song Id="4">
+    <Artist>Amy Winehouse</Artist>
+    <Title>Stronger than me</Title>
+    <YearOfRelease>2003</YearOfRelease>
+    <Genre>Jazz</Genre>
+    <Likes>1</Likes>
+    <Description />
+  </Song>
+  <Song Id="5">
+    <Artist>Rihanna</Artist>
+    <Title>Umbrella</Title>
+    <YearOfRelease>2008</YearOfRelease>
+    <Genre>Pop</Genre>
+    <Likes>1</Likes>
+    <Description />
+  </Song>
+  <Song Id="6">
+    <Artist>Example</Artist>
+    <Title>All night</Title>
+    <YearOfRelease>2019</YearOfRelease>
+    <Genre>Electronic</Genre>
+    <Likes>1</Likes>
+    <Description />
+  </Song>
+  <Song Id="7">
+    <Artist>Lady Pank </Artist>
+    <Title>Mniej niż zero</Title>
+    <YearOfRelease>1983</YearOfRelease>
+    <Genre>Rock</Genre>
+    <Likes>1</Likes>
+    <Description>Utwór pochodzi z debiutanckiego albumu Lady Pank</Description>
+  </Song>
+  <Song Id="8">
+    <Artist>Jon Lajoie</Artist>
+    <Title>Everyday Normal Guy 2</Title>
+    <YearOfRelease>2009</YearOfRelease>
+    <Genre>HipHop</Genre>
+    <Likes>1</Likes>
+    <Description />
+  </Song>
+  <Song Id="9">
+    <Artist>Fergie</Artist>
+    <Title>A little party never killed nobody</Title>
+    <YearOfRelease>2013</YearOfRelease>
+    <Genre>Pop</Genre>
+    <Likes>1</Likes>
+    <Description>Singiel z dwiema nominacjami do World Music Award</Description>
+  </Song>
+  <Song Id="10">
+    <Artist>Halsey</Artist>
+    <Title>You should be sad</Title>
+    <YearOfRelease>2020</YearOfRelease>
+    <Genre>Pop</Genre>
+    <Likes>1</Likes>
+    <Description />
+  </Song>
+  <Song Id="11">
+    <Artist>Białas</Artist>
+    <Title>Swoosh Gang</Title>
+    <YearOfRelease>2020</YearOfRelease>
+    <Genre>HipHop</Genre>
+    <Likes>1</Likes>
+    <Description>Na feacie Pezet</Description>
+  </Song>
+  <Song Id="12">
+    <Artist>Antonio Vivaldi</Artist>
+    <Title>Cztery pory roku</Title>
+    <YearOfRelease>1725</YearOfRelease>
+    <Genre>Classical</Genre>
+    <Likes>1</Likes>
+    <Description>Cykl 4 koncertów skrzypcowych</Description>
+  </Song>
+  <Song Id="13">
+    <Artist>Ania Karwan</Artist>
+    <Title>Aleja gwiazd</Title>
+    <YearOfRelease>2017</YearOfRelease>
+    <Genre>Pop</Genre>
+    <Likes>1</Likes>
+    <Description>Cover utworu Zdzisławy Sośnickiej pod tym samym tytułem</Description>
+  </Song>
+  <Song Id="14">
+    <Artist>Frank Sinatra</Artist>
+    <Title>That's life</Title>
+    <YearOfRelease>1966</YearOfRelease>
+    <Genre>Jazz</Genre>
+    <Likes>1</Likes>
+    <Description />
+  </Song>
+  <Song Id="15">
+    <Artist>Ania Wyszkoni</Artist>
+    <Title>Wiem że jesteś tam</Title>
+    <YearOfRelease>2010</YearOfRelease>
+    <Genre>Pop</Genre>
+    <Likes>1</Likes>
+    <Description>Czwarty solowy singel z albumu Pan i Pani, który wydany został 14 września 2010</Description>
+  </Song>
+  <Song Id="16">
+    <Artist>Dwa sławy</Artist>
+    <Title>To brzmi jak</Title>
+    <YearOfRelease>2017</YearOfRelease>
+    <Genre>HipHop</Genre>
+    <Likes>1</Likes>
+    <Description />
+  </Song>
+  <Song Id="17">
+    <Artist>Phantoms</Artist>
+    <Title>One in a million</Title>
+    <YearOfRelease>2020</YearOfRelease>
+    <Genre>Electronic</Genre>
+    <Likes>1</Likes>
+    <Description />
+  </Song>
+  <Song Id="18">
+    <Artist>Vince yara</Artist>
+    <Title>Damage</Title>
+    <YearOfRelease>2020</YearOfRelease>
+    <Genre>Electronic</Genre>
+    <Likes>1</Likes>
+    <Description />
+  </Song>
+  <Song Id="19">
+    <Artist>Andrea Bocelli</Artist>
+    <Title>Can't help falling in love</Title>
+    <YearOfRelease>2006</YearOfRelease>
+    <Genre>Classical</Genre>
+    <Likes>1</Likes>
+    <Description />
+  </Song>
+  <Song Id="20">
+    <Artist>Elvis Presley</Artist>
+    <Title>Jailhouse rock</Title>
+    <YearOfRelease>1957</YearOfRelease>
+    <Genre>Rock</Genre>
+    <Likes>1</Likes>
+    <Description>Piosenka ukazała się w filmie pod tym samym tytułem</Description>
+  </Song>
+</Songs>
