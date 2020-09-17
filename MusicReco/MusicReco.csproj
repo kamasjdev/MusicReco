@@ -9,4 +9,10 @@
     <ProjectReference Include="..\MusicReco.App\MusicReco.App.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="SongDatabase.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -13,6 +13,7 @@ namespace MusicReco.App.Concrete
 {
     public class SongService : ISongService
     {
+        public string songDatabasePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SongDatabase.xml");
         public List<Song> Items { get; set; }
         public SongService()
         {
@@ -97,7 +98,7 @@ namespace MusicReco.App.Concrete
             root.ElementName = "Songs";
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Song>), root);
 
-            using StreamWriter sw = new StreamWriter(@"../../../../SongDatabase.xml");
+            using StreamWriter sw = new StreamWriter(songDatabasePath);
             xmlSerializer.Serialize(sw, Items);
 
         }
@@ -106,14 +107,14 @@ namespace MusicReco.App.Concrete
         {
             Song chosenSong = Items.FirstOrDefault(p => p.Id == songId);
 
-            XDocument doc = XDocument.Load(@"../../../../SongDatabase.xml");
+            XDocument doc = XDocument.Load(songDatabasePath);
             var songs = doc.Root.Elements("Song").Where(
                 song => song.Attribute("Id").Value == songId.ToString());
             if(songs.Any())
             {
                 songs.First().Element("Likes").Value = chosenSong.Likes.ToString();
             }
-            doc.Save(@"../../../../SongDatabase.xml");
+            doc.Save(songDatabasePath);
         }
 
         private List<Song> LoadSongsFromXmlFile()
@@ -123,7 +124,7 @@ namespace MusicReco.App.Concrete
             root.ElementName = "Songs";
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Song>), root);
 
-            string xml = File.ReadAllText(@"../../../../SongDatabase.xml");
+            string xml = File.ReadAllText(songDatabasePath);
             StringReader sr = new StringReader(xml);            
             songs = (List<Song>)xmlSerializer.Deserialize(sr);
             return songs;

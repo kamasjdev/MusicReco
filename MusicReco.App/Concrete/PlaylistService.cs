@@ -12,16 +12,16 @@ namespace MusicReco.App.Concrete
 {
     public class PlaylistService : IPlaylistService
     {
+        public string playlistsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Playlists.json");
         public List<Playlist> Items { get; set; }
         public PlaylistService()
         {
-            if (File.Exists(@"Playlists.json"))
+            if (File.Exists(playlistsPath))
                 Items = LoadPlaylistsFromFile();
             else
-                Items = new List<Playlist>();
-            
+                Items = new List<Playlist>();           
         }
-
+        
         public int GetLastId()
         {
             int lastId;
@@ -89,7 +89,7 @@ namespace MusicReco.App.Concrete
 
         public void UpdateFileWithPlaylists()
         {
-            using FileStream fs = File.Open(@"Playlists.json",FileMode.OpenOrCreate);
+            using FileStream fs = File.Open(playlistsPath, FileMode.OpenOrCreate);
             using StreamWriter sw = new StreamWriter(fs);
             using JsonWriter writer = new JsonTextWriter(sw);
             JsonSerializer serializer = new JsonSerializer();
@@ -99,7 +99,7 @@ namespace MusicReco.App.Concrete
 
         private List<Playlist> LoadPlaylistsFromFile()
         {
-            string output = File.ReadAllText(@"Playlists.json");
+            string output = File.ReadAllText(playlistsPath);
             var playlists = JsonConvert.DeserializeObject<List<Playlist>>(output);
             return playlists;
         }
