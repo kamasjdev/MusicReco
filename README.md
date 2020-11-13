@@ -9,7 +9,7 @@
 ## General info
 MusicReco is a console app that enables searching music recommendations based on genre, artist and year of release - it's the main feature of this project. You can also add new song to the database, which is .xml file with several examples of songs. Creating your own playlists is also possible - detailed info is available in the Features section.
 MusicReco is built using Clean Architecture.
-This project was created during C# course, but all code and features were created by myself.
+This project was written during C# course, but all code and features were created by myself.
 
 ## Technologies
 * .NET Core 3.1.6
@@ -21,7 +21,7 @@ This project was created during C# course, but all code and features were create
 * Used data format: XML, JSON
 
 According to Clean Architecture, the project consists of application and domain layer.
-The first layer consists interfaces and managers with services injected by Dependency Injection,
+The first layer contains interfaces and managers with services injected by Dependency Injection,
 the domain layer has all models.
 There are also unit tests written in accordance with AAA pattern.
 ## Features
