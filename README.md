@@ -1,5 +1,5 @@
 # MusicReco
-> Application for music recommendations with useful features!
+> Application for music recommendations with additional features!
 
 ## Table of contents
 * [General info](#general-info)
@@ -22,7 +22,8 @@ This project was created during C# course, but all code and features were create
 
 According to Clean Architecture, the project consists of application and domain layer.
 The first layer consists interfaces and managers with services injected by Dependency Injection,
-the domain layer has all models. There are also unit tests written in accordance with AAA pattern.
+the domain layer has all models.
+There are also unit tests written in accordance with AAA pattern.
 ## Features
 
 * Add your favourite songs to the database
